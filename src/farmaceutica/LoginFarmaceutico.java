@@ -230,7 +230,7 @@ public class LoginFarmaceutico extends javax.swing.JFrame {
                 farmaceutico.setSenha(TextSenhaFarmaceutico.getText());
                 farmaceuticoBD = new FarmaceuticoDAO();
 
-                if( farmaceuticoBD.LoginFarmaceutico(farmaceutico)){
+                if( farmaceuticoBD.login(farmaceutico)){
                     TelaPrincipalFarmaceutico telaprincipal = new TelaPrincipalFarmaceutico();
                     telaprincipal.setVisible(true);
                     this.dispose();

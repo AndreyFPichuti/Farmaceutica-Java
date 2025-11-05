@@ -8,7 +8,6 @@
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/LoginMedico.java</file>
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/TelaInicio.java</file>
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/RetornoPesquisaRemedio.java</file>
-            <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/ConexaoBD.java</file>
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/LoginPaciente.java</file>
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/Remedio.java</file>
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/Paciente.java</file>
@@ -16,13 +15,14 @@
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/PacienteDAO.java</file>
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/FarmaceuticoDAO.java</file>
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/.env</file>
+            <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/LoginFarmaceutico.java</file>
+            <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/PedirMedicamento.java</file>
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/Farmaceutica.java</file>
-            <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/ConexaoTest.java</file>
+            <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/RegistroRemedio.java</file>
+            <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/Medico.java</file>
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/TelaPrincipalFarmaceutico.java</file>
-            <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/PesquisaRemedio.java</file>
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/RemedioDAO.java</file>
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/RegistroMedico.java</file>
-            <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/EnvLoader.java</file>
             <file>file:/E:/Workspace-NetBeans/Farmaceutica/Farmaceutica/src/farmaceutica/MedicoDAO.java</file>
         </group>
     </open-files>

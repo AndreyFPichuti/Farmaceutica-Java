@@ -198,34 +198,32 @@ public class PedirMedicamento extends javax.swing.JFrame {
     }//GEN-LAST:event_TextNomeRemedioActionPerformed
 
     private void BtnPesquisaRemedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPesquisaRemedioActionPerformed
-        // TODO add your handling code here:
-    String nomeRemedio = TextNomeRemedio.getText();
-    RemedioDAO remedioBD = new RemedioDAO();
-    
-    Remedio remedio = remedioBD.PedirMedicamento(nomeRemedio);
-    
+        String nomeRemedio = TextNomeRemedio.getText();
+        RemedioDAO remedioDAO = new RemedioDAO();
 
-    
-    
-    if (remedio != null) {
-        if (remedio.getEstoque() > 0) {
-            int novaQuantidade = remedio.getEstoque() - 1;
-            boolean atualizado = remedioBD.seAtualizar(remedio.getIdRemedio(), novaQuantidade);
+        // Novo nome do método (antes era PedirMedicamento)
+        Remedio remedio = remedioDAO.buscarPorNome(nomeRemedio);
 
-            if (atualizado) {
-                JOptionPane.showMessageDialog(this, "Remédio requisitado com sucesso!");
-                //remedioBD.AtualizaRemedio(remedio.getIdRemedio(), novaQuantidade);
-                
-                remedioBD.AtualizaRemedio(novaQuantidade, remedio.getIdRemedio());
+        if (remedio != null) {
+            if (remedio.getEstoque() > 0) {
+                int novaQuantidade = remedio.getEstoque() - 1;
+
+                // Novo nome do método (antes era seAtualizar)
+                boolean atualizado = remedioDAO.atualizarEstoque(remedio.getIdRemedio(), novaQuantidade);
+
+                if (atualizado) {
+                    JOptionPane.showMessageDialog(this, "Remédio requisitado com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao atualizar o estoque do remédio!");
+                }
+
             } else {
-                JOptionPane.showMessageDialog(this, "Erro ao atualizar o estoque do remédio!");
+                JOptionPane.showMessageDialog(this, "Estoque do remédio esgotado!");
             }
+
         } else {
-            JOptionPane.showMessageDialog(this, "Estoque do remédio esgotado!");
+            JOptionPane.showMessageDialog(this, "Remédio não encontrado!");
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Remédio não encontrado!");
-    }
     }//GEN-LAST:event_BtnPesquisaRemedioActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

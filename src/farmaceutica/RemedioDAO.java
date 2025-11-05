@@ -1,192 +1,120 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package farmaceutica;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
- * @author Andrey
+ * Classe DAO responsável pelas operações de persistência do Remédio.
+ * Aplicação dos princípios de Clean Code: SRP, DRY, KISS e boas práticas de SQL.
  */
 public class RemedioDAO {
-    public void insert(Remedio remedio){
-        String sql = "INSERT INTO Remedio (Farmaceutico_idFarmaceutico, nome, estoque, via_medicacao, indicacoes, contraindicacoes, efeitos_colaterais, forma_farmaceutica, principal_ativo, validade) VALUES ("
-     +remedio.getIdFarmaceutico() + ",'"
-     +remedio.getNome() + "',"
-     +remedio.getEstoque() + ",'"
-     +remedio.getViaMedicacao() + "','"
-     +remedio.getIndicacoes() + "','"
-     +remedio.getContraindicacoes() + "','"     
-     +remedio.getEfeitosColaterais() + "','"
-     +remedio.getFormaFarmaceutica() + "','"
-     +remedio.getPrincipalAtivo() + "','"
-     +remedio.getValidade() + "')";
-     
-     try {
-     Connection c = ConexaoBD.getConnection();
-     PreparedStatement ps = c.prepareStatement(sql);
-     ps.execute();
-     JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso");
-     ps.close();
-     c.close();
-     } catch (SQLException e) {
-     JOptionPane.showMessageDialog(null, "Erros na Transação");
-     e.printStackTrace();
-     } }
-    
-    public void VerificaFarmaceutico(Farmaceutico farmaceutico) throws SQLException{
-    Connection con = ConexaoBD.getConnection();
-    RegistroRemedio registroremedio = new RegistroRemedio();
-        int idFarmaceutico = Integer.parseInt(registroremedio.TextIdFarmaceutico.getText());
-        String sql = "SELECT * FROM Farmaceutico where idFarmaceutico = ?";
-        
-          try (PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, idFarmaceutico);
-           
-            ResultSet rs = stmt.executeQuery();
-            
-            /*if (rs.next()) {
-                JOptionPane.showMessageDialog(this, "Login successful");
-                // Open the next window or perform any action
-            } else {
-                JOptionPane.showMessageDialog(this, "Invalid username or password");
-            }
-            */
+
+    /**
+     * Insere um novo remédio no banco de dados.
+     * @param remedio objeto com os dados a serem cadastrados
+     * @return true se o cadastro foi realizado com sucesso
+     */
+    public boolean insert(Remedio remedio) {
+        String sql = "INSERT INTO Remedio (Farmaceutico_idFarmaceutico, nome, estoque, via_medicacao, indicacoes, contraindicacoes, efeitos_colaterais, forma_farmaceutica, principal_ativo, validade) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, remedio.getIdFarmaceutico());
+            ps.setString(2, remedio.getNome());
+            ps.setInt(3, remedio.getEstoque());
+            ps.setString(4, remedio.getViaMedicacao());
+            ps.setString(5, remedio.getIndicacoes());
+            ps.setString(6, remedio.getContraindicacoes());
+            ps.setString(7, remedio.getEfeitosColaterais());
+            ps.setString(8, remedio.getFormaFarmaceutica());
+            ps.setString(9, remedio.getPrincipalAtivo());
+            ps.setString(10, remedio.getValidade());
+            ps.executeUpdate();
+            return true;
+
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    
-    
-    }
-    
-    public Remedio PedirMedicamento(String nomeRemedio){
-    Remedio remedio = null;
-    String sql = "SELECT * FROM Remedio WHERE nome = ?";
-    Connection c = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-    
-    
-
-    try {
-        c = ConexaoBD.getConnection();
-        ps = c.prepareStatement(sql);
-        ps.setString(1, nomeRemedio);
-
-        rs = ps.executeQuery();
-
-        if (rs.next()) {
-            JOptionPane.showMessageDialog(null, "Remédio encontrado!");
-            remedio = new Remedio();
-            remedio.setIdRemedio(rs.getInt("idRemedio"));
-            remedio.setNome(rs.getString("nome"));
-            remedio.setEstoque(rs.getInt("estoque"));
-            
-        } else {
-            JOptionPane.showMessageDialog(null, "Nome incorreto!");  
-        }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Erro ao pesquisar remédio!");
-        e.printStackTrace();
-        
-    }
-    finally {
-        try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (c != null) c.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    return remedio;
-    }
-    
-    public boolean seAtualizar(int idRemedio, int novoEstoque){
-        String sql = "UPDATE Remedio SET estoque = ? WHERE idRemedio = ?";
-        Connection c = null;
-        PreparedStatement ps = null;
-
-        try {
-            c = ConexaoBD.getConnection();
-            ps = c.prepareStatement(sql);
-            ps.setInt(1, novoEstoque);
-            ps.setInt(2, idRemedio);
-
-            int colunasAfetadas = ps.executeUpdate();
-            return colunasAfetadas > 0;
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao atualizar a quantidade do remédio!");
-            e.printStackTrace();
+            System.err.println("Erro ao inserir remédio: " + e.getMessage());
             return false;
-        } finally {
-            try {
-                if (ps != null) ps.close();
-                if (c != null) c.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
-    
-    public void AtualizaRemedio(int novoEstoque, int idRemedio){
-        String sql = "UPDATE Remedio SET estoque = ? WHERE idRemedio = ?";
-        Connection c = null;
-        PreparedStatement ps = null;
 
-        try {
-            c = ConexaoBD.getConnection();
-            ps = c.prepareStatement(sql);
+    /**
+     * Atualiza o estoque de um remédio.
+     * @param idRemedio identificador do remédio
+     * @param novoEstoque nova quantidade em estoque
+     * @return true se o estoque foi atualizado com sucesso
+     */
+    public boolean atualizarEstoque(int idRemedio, int novoEstoque) {
+        String sql = "UPDATE Remedio SET estoque = ? WHERE idRemedio = ?";
+
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, novoEstoque);
             ps.setInt(2, idRemedio);
-            
+            int linhasAfetadas = ps.executeUpdate();
+            return linhasAfetadas > 0;
+
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao atualizar a quantidade do remédio!");
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ps != null) ps.close();
-                if (c != null) c.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            System.err.println("Erro ao atualizar estoque do remédio: " + e.getMessage());
+            return false;
         }
     }
-    
-    public void GerarTabela(DefaultTableModel model) {
-        String query = "SELECT * FROM Remedio";
 
-        try {
-            Connection connection = ConexaoBD.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query); 
-             ResultSetMetaData metaData = resultSet.getMetaData();
-            int columnCount = metaData.getColumnCount();
+    /**
+     * Busca um remédio pelo nome.
+     * @param nomeRemedio nome do remédio a ser pesquisado
+     * @return objeto Remedio encontrado ou null se não encontrado
+     */
+    public Remedio buscarPorNome(String nomeRemedio) {
+        String sql = "SELECT * FROM Remedio WHERE nome = ?";
 
-            // Adiciona as colunas ao modelo da tabela
-            for (int i = 1; i <= columnCount; i++) {
-                model.addColumn(metaData.getColumnName(i));
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, nomeRemedio);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Remedio remedio = new Remedio();
+                    remedio.setIdRemedio(rs.getInt("idRemedio"));
+                    remedio.setNome(rs.getString("nome"));
+                    remedio.setEstoque(rs.getInt("estoque"));
+                    return remedio;
+                }
             }
 
-            // Adiciona as linhas ao modelo da tabela
-            while (resultSet.next()) {
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar remédio: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Lista todos os remédios e preenche uma tabela.
+     * @param model modelo da tabela a ser preenchido
+     */
+    public void listarRemedios(DefaultTableModel model) {
+        String sql = "SELECT * FROM Remedio";
+
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            int columnCount = rs.getMetaData().getColumnCount();
+            while (rs.next()) {
                 Object[] rowData = new Object[columnCount];
                 for (int i = 0; i < columnCount; i++) {
-                    rowData[i] = resultSet.getObject(i + 1);
+                    rowData[i] = rs.getObject(i + 1);
                 }
                 model.addRow(rowData);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao listar remédios: " + e.getMessage());
         }
     }
 }

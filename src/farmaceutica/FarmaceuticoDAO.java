@@ -11,65 +11,62 @@ import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
- * @author Andrey
+ * 
+ * Classe DAO responsável pelas operações de persistência do Farmacêutico
+ * Aplicação dos princípios de Clean Code: SRP, DRY, KISS e boas práticas de SQL
  */
 public class FarmaceuticoDAO {
     
+    /**
+     * Insere um novo farmacêutico no banco de dados
+     * @param farmaceutico objeto com os dados a serem cadastrados
+     * @return true se o cadastro foi realizado com sucesso
+     */
     public boolean insert(Farmaceutico farmaceutico) {
         String sql = "INSERT INTO Farmaceutico (email, senha) VALUES (?, ?)";
-        
         try (Connection conn = ConexaoBD.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)) {
-            
-            ps.setString(1, farmaceutico.getEmail());
-            ps.setString(2, farmaceutico.getSenha());
-            ps.executeUpdate();
-            return true;
+
+         ps.setString(1, farmaceutico.getEmail());
+         ps.setString(2, farmaceutico.getSenha());
+         ps.executeUpdate();
+         return true;
+
         } catch (SQLException e) {
         System.err.println("Erro ao inserir farmacêutico: " + e.getMessage());
         return false;
         }
     }
 
-public boolean LoginFarmaceutico(Farmaceutico farmaceutico) {
+    /**
+     * Realiza o login do farmacêutico
+     * @param farmaceutico objeto contendo e-mail e senha
+     * @return true se as credenciais forem válidas
+     */
+    public boolean login(Farmaceutico farmaceutico) {
     String sql = "SELECT * FROM Farmaceutico WHERE email = ? AND senha = ?";
-    Connection c = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
 
-    try {
-        c = ConexaoBD.getConnection();
-        ps = c.prepareStatement(sql);
+    try (Connection conn = ConexaoBD.getConnection();
+    PreparedStatement ps = conn.prepareStatement(sql)) {
+         ps.setString(1, farmaceutico.getEmail());
+         ps.setString(2, farmaceutico.getSenha());
 
-        ps.setString(1, farmaceutico.getEmail());
-        ps.setString(2, farmaceutico.getSenha());
+         try (ResultSet rs = ps.executeQuery()) {
+             return rs.next();
+         }
 
-        rs = ps.executeQuery();
-
-        if (rs.next()) {
-            JOptionPane.showMessageDialog(null, "Login realizado com sucesso");
-            return true;
-        } else {
-            JOptionPane.showMessageDialog(null, "E-mail ou senha incorretos!");
-            return false;
-        }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Erro ao realizar login!");
-        e.printStackTrace();
-        return false;
-    } finally {
-        try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (c != null) c.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+        System.err.println("Erro ao realizar login: " + e.getMessage());
+        return false;
         }
     }
-}
 
-public void PesquisarRemedio(Remedio remedio, RetornoPesquisaRemedio retorno) {
+    /**
+     * Busca remédios de acordo com nome ou indicações
+     * @param remedio objeto contendo os critérios de pesquisa
+     * @param retorno objeto responsável por exibir os resultados
+     */
+    public void PesquisarRemedio(Remedio remedio, RetornoPesquisaRemedio retorno) {
     String sql = "SELECT * FROM remedio WHERE nome LIKE ? OR indicacoes LIKE ?";
 
     try (Connection connection = ConexaoBD.getConnection();
@@ -111,38 +108,42 @@ public void PesquisarRemedio(Remedio remedio, RetornoPesquisaRemedio retorno) {
             }
         }
     } catch (SQLException e) {
-        e.printStackTrace();
+        System.err.println("Erro ao buscar remédios: " + e.getMessage());
     }
 }
-
-public void GerarRelatorio(Paciente paciente, RetornoRelatorio retorno){
-    String sql = "SELECT * FROM Paciente";
     
-    try (Connection connection = ConexaoBD.getConnection();
-         PreparedStatement ps = connection.prepareStatement(sql)) {
+    /**
+     * Gera relatório de pacientes cadastrados
+     * @param retorno componente gráfico para exibição da tela
+     */
+    public void GerarRelatorio(RetornoRelatorio retorno){
+        String sql = "SELECT * FROM Paciente";
 
-      
+        try (Connection connection = ConexaoBD.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
 
-        try (ResultSet resultSet = ps.executeQuery()) {
-            DefaultTableModel dtmPaciente = (DefaultTableModel) retorno.TabelaRelatorio.getModel();
 
-            while (resultSet.next()) {
-                Paciente p = new Paciente();
-                p.setNome(resultSet.getString("Nome"));
-                p.setCpf(resultSet.getString("Cpf"));
-               
 
-                Object[] dadosPaciente = {
-                    p.getNome(),
-                    p.getCpf(),
-                    
-                };
+            try (ResultSet resultSet = ps.executeQuery()) {
+                DefaultTableModel dtmPaciente = (DefaultTableModel) retorno.TabelaRelatorio.getModel();
 
-                dtmPaciente.addRow(dadosPaciente);
+                while (resultSet.next()) {
+                    Paciente p = new Paciente();
+                    p.setNome(resultSet.getString("Nome"));
+                    p.setCpf(resultSet.getString("Cpf"));
+
+
+                    Object[] dadosPaciente = {
+                        p.getNome(),
+                        p.getCpf(),
+
+                    };
+
+                    dtmPaciente.addRow(dadosPaciente);
+                }
             }
+        } catch (SQLException e) {
+            System.err.println("Erro ao gerar relatório de pacientes: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
     }
-}
 }

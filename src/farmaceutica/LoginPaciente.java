@@ -237,7 +237,7 @@ public class LoginPaciente extends javax.swing.JFrame {
                 paciente.setCpf(TextCpfPaciente.getText());
                 pacienteBD = new PacienteDAO();
 
-                if( pacienteBD.LoginPaciente(paciente)){
+                if( pacienteBD.login(paciente)){
                     PedirMedicamento pedirmedicamento = new PedirMedicamento();
                     pedirmedicamento.setVisible(true);
                     this.dispose();

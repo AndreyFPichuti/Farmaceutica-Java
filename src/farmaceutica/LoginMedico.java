@@ -231,7 +231,7 @@ public class LoginMedico extends javax.swing.JFrame {
         medico.setSenha(TextSenhaMedico.getText());
         medicoBD = new MedicoDAO();
         
-        if( medicoBD.LoginMedico(medico)){
+        if(medicoBD.login(medico)){
         TelaPrincipalMedico telaprincipal = new TelaPrincipalMedico();
         telaprincipal.setVisible(true);
         this.dispose();

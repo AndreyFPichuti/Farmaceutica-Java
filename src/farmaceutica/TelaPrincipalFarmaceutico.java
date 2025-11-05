@@ -278,13 +278,12 @@ public class TelaPrincipalFarmaceutico extends javax.swing.JFrame {
 
 
     if (evt.getSource() == BtnGerarRelatorio) {
-        Paciente p = new Paciente();
         FarmaceuticoDAO farmaceuticoBD = new FarmaceuticoDAO();
 
         
 
         RetornoRelatorio retorno = new RetornoRelatorio();
-        farmaceuticoBD.GerarRelatorio(p, retorno);
+        farmaceuticoBD.GerarRelatorio(retorno);
 
         retorno.setVisible(true);
         this.dispose();

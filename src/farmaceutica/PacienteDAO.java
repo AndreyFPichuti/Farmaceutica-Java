@@ -1,95 +1,60 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package farmaceutica;
 
-import java.sql.*;
-import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
- *
- * @author Andrey
+ * Classe DAO responsável pelas operações de persistência do Paciente.
+ * Aplicação dos princípios de Clean Code: SRP, DRY, KISS e boas práticas de SQL.
  */
 public class PacienteDAO {
-    //public void solicitarRemedio()
-    public void insert(Paciente paciente){
- 
-    String sql = "INSERT INTO Paciente (Medico_idMedico, nome,cpf) VALUES ("
-    +paciente.getIdMedico() + ",'"
-    +paciente.getNome() + "','"
-    +paciente.getCpf() + "')";
-     
-     try {
-     Connection c = ConexaoBD.getConnection();
-     PreparedStatement ps = c.prepareStatement(sql);
-     ps.execute();
-     JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso");
-     ps.close();
-     c.close();
-     } catch (SQLException e) {
-     JOptionPane.showMessageDialog(null, "Erros na Transação");
-     e.printStackTrace();
-     } 
-    }
-    public void VerificaMedico(Medico medico) throws SQLException{
-    Connection con = ConexaoBD.getConnection();
-    RegistroPaciente registropaciente = new RegistroPaciente();
-        int idMedico = Integer.parseInt(registropaciente.TextIdMedico.getText());
-        String sql = "SELECT * FROM Medico where idMedico = ?";
-        
-          try (PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, idMedico);
-           
-            ResultSet rs = stmt.executeQuery();
-            
-            /*if (rs.next()) {
-                JOptionPane.showMessageDialog(this, "Login successful");
-                // Open the next window or perform any action
-            } else {
-                JOptionPane.showMessageDialog(this, "Invalid username or password");
-            }
-            */
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    
-    
-    }
-    public boolean LoginPaciente(Paciente paciente) {
-    String sql = "SELECT * FROM Paciente WHERE nome = ? AND cpf = ?";
-    Connection c = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
 
-    try {
-        c = ConexaoBD.getConnection();
-        ps = c.prepareStatement(sql);
+    /**
+     * Insere um novo paciente no banco de dados.
+     * @param paciente objeto com os dados a serem cadastrados
+     * @return true se o cadastro foi realizado com sucesso
+     */
+    public boolean insert(Paciente paciente) {
+        String sql = "INSERT INTO Paciente (Medico_idMedico, nome, cpf) VALUES (?, ?, ?)";
 
-        ps.setString(1, paciente.getNome());
-        ps.setString(2, paciente.getCpf());
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        rs = ps.executeQuery();
-
-        if (rs.next()) {
-            JOptionPane.showMessageDialog(null, "Login realizado com sucesso");
+            ps.setInt(1, paciente.getIdMedico());
+            ps.setString(2, paciente.getNome());
+            ps.setString(3, paciente.getCpf());
+            ps.executeUpdate();
             return true;
-        } else {
-            JOptionPane.showMessageDialog(null, "Nome ou CPF incorretos!");
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao inserir paciente: " + e.getMessage());
             return false;
         }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Erro ao realizar login!");
-        e.printStackTrace();
-        return false;
-    } finally {
-        try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (c != null) c.close();
+    }
+
+    /**
+     * Realiza o login de um paciente.
+     * @param paciente objeto contendo nome e cpf
+     * @return true se as credenciais forem válidas
+     */
+    public boolean login(Paciente paciente) {
+        String sql = "SELECT * FROM Paciente WHERE nome = ? AND cpf = ?";
+
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, paciente.getNome());
+            ps.setString(2, paciente.getCpf());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao realizar login: " + e.getMessage());
+            return false;
         }
     }
-}
 }

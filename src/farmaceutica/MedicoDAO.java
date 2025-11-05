@@ -1,76 +1,59 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package farmaceutica;
 
-import java.sql.*;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
- *
- * @author Andrey
+ * Classe DAO responsável pelas operações de persistência do Médico.
+ * Aplicação dos princípios de Clean Code: SRP, DRY, KISS e boas práticas de SQL.
  */
 public class MedicoDAO {
-    
-    //public void ManterPaciente(String nome, String cpf) {}
-    public void insert(Medico medico){
-        RegistroMedico registromedico = new RegistroMedico();
-        
-        String sql = "INSERT INTO Medico (email,senha) VALUES ('"
-     +medico.getEmail() + "','"
-     +medico.getSenha() + "')";
-     
-     try {
-     Connection c = ConexaoBD.getConnection();
-     PreparedStatement ps = c.prepareStatement(sql);
-     ps.execute();
-     JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso");
-     
-     
-     
-     ps.close();
-     c.close();
-     } catch (SQLException e) {
-     JOptionPane.showMessageDialog(null, "Erros na Transação");
-     e.printStackTrace();
-     } }
-    
-    
-    public boolean LoginMedico(Medico medico) {
-    String sql = "SELECT * FROM Medico WHERE email = ? AND senha = ?";
-    Connection c = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
 
-    try {
-        c = ConexaoBD.getConnection();
-        ps = c.prepareStatement(sql);
+    /**
+     * Insere um novo médico no banco de dados.
+     * @param medico objeto com os dados a serem cadastrados
+     * @return true se o cadastro foi realizado com sucesso
+     */
+    public boolean insert(Medico medico) {
+        String sql = "INSERT INTO Medico (email, senha) VALUES (?, ?)";
 
-        ps.setString(1, medico.getEmail());
-        ps.setString(2, medico.getSenha());
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        rs = ps.executeQuery();
-
-        if (rs.next()) {
-            JOptionPane.showMessageDialog(null, "Login realizado com sucesso");
+            ps.setString(1, medico.getEmail());
+            ps.setString(2, medico.getSenha());
+            ps.executeUpdate();
             return true;
-        } else {
-            JOptionPane.showMessageDialog(null, "E-mail ou senha incorretos!");
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao inserir médico: " + e.getMessage());
             return false;
         }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Erro ao realizar login!");
-        e.printStackTrace();
-        return false;
-    } finally {
-        try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (c != null) c.close();
+    }
+
+    /**
+     * Realiza o login de um médico.
+     * @param medico objeto contendo e-mail e senha
+     * @return true se as credenciais forem válidas
+     */
+    public boolean login(Medico medico) {
+        String sql = "SELECT * FROM Medico WHERE email = ? AND senha = ?";
+
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, medico.getEmail());
+            ps.setString(2, medico.getSenha());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao realizar login: " + e.getMessage());
+            return false;
         }
     }
-}
 }
