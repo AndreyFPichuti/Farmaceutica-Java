@@ -64,4 +64,13 @@ public class RemedioTest {
         assertEquals(f, r.getFarmaceutico());
     }
 
+   
+    @Test
+    void testEstoqueNaoPodeSerNegativo() {
+        Remedio r = new Remedio();
+        assertThrows(IllegalArgumentException.class, () -> r.setEstoque(-10));
+}
+
+
+
 }
