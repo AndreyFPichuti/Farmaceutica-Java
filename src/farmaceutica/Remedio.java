@@ -66,6 +66,9 @@ public class Remedio {
     }
 
     public void setEstoque(int estoque) {
+        if (estoque < 0) {
+        throw new IllegalArgumentException("Estoque não pode ser negativo");
+    }
         this.estoque = estoque;
     }
 
@@ -140,4 +143,5 @@ public class Remedio {
     public void adicionaPaciente(Paciente paciente) {
         this.pacientes.add(paciente);
     }
+
 }
