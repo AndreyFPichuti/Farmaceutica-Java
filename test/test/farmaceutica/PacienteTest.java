@@ -1,14 +1,14 @@
-package farmaceutica.test;
+package test.farmaceutica;
 
 import farmaceutica.Paciente;
 import farmaceutica.Medico;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class PacienteTest {
 
     @Test
-    void testConstrutorCompletoEGetters() {
+    public void testConstrutorCompletoEGetters() {
         Medico m = new Medico();
         Paciente p = new Paciente("Maria", "11122233344", 1, m);
         
@@ -19,7 +19,7 @@ public class PacienteTest {
     }
 
     @Test
-    void testSetters() {
+    public void testSetters() {
         Paciente p = new Paciente();
         Medico m = new Medico();
         

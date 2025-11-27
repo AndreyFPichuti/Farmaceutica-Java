@@ -255,6 +255,9 @@
               </Border>
             </Property>
           </Properties>
+          <AccessibilityProperties>
+            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="ID Farmac&#xea;utico"/>
+          </AccessibilityProperties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TextIdFarmaceuticoActionPerformed"/>
           </Events>

@@ -74,7 +74,7 @@ public class TelaPrincipalFarmaceutico extends javax.swing.JFrame {
 
         jLabel15.setBackground(new java.awt.Color(0, 0, 0));
         jLabel15.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jLabel15.setText("Gerar Relatório");
+        jLabel15.setText("Exibir Pacientes");
 
         IrParaRegistrarRemedio.setBackground(new java.awt.Color(255, 36, 52));
         IrParaRegistrarRemedio.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N

@@ -2,15 +2,14 @@ package test.farmaceutica;
 
 import farmaceutica.Remedio;
 import farmaceutica.Farmaceutico;
-import farmaceutica.Paciente;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.ArrayList;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class RemedioTest {
 
     @Test
-    void testConstrutorCompletoEGetters() {
+    public void testConstrutorCompletoEGetters() {
         Farmaceutico f = new Farmaceutico(1,  "joao@example.com", "senha123");
         Remedio r = new Remedio(
             1, 10, "Paracetamol", 50, "Oral", "Dor de cabeça",
@@ -33,7 +32,7 @@ public class RemedioTest {
     }
 
     @Test
-    void testSetters() {
+    public void testSetters() {
         Remedio r = new Remedio();
         Farmaceutico f = new Farmaceutico(2, "gabriel@example.com", "senha");
 
@@ -66,11 +65,8 @@ public class RemedioTest {
 
    
     @Test
-    void testEstoqueNaoPodeSerNegativo() {
+    public void testEstoqueNaoPodeSerNegativo() {
         Remedio r = new Remedio();
         assertThrows(IllegalArgumentException.class, () -> r.setEstoque(-10));
 }
-
-
-
 }

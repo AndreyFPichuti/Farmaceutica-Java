@@ -1,13 +1,13 @@
-package farmaceutica.test;
+package test.farmaceutica;
 
 import farmaceutica.Farmaceutico;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class FarmaceuticoTest {
 
     @Test
-    void testConstrutorCompletoEGetters() {
+    public void testConstrutorCompletoEGetters() {
         Farmaceutico f = new Farmaceutico(1, "joao@example.com", "1234");
 
         assertEquals(1, f.getIdFarmaceutico());
@@ -16,7 +16,7 @@ public class FarmaceuticoTest {
     }
     
     @Test
-    void testSetters() {
+    public void testSetters() {
         Farmaceutico f = new Farmaceutico();
 
         f.setIdFarmaceutico(5);
