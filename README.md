@@ -10,11 +10,14 @@ Baixe o repositório e abra o projeto no NetBeans. Importe o banco de dados dent
 # Vídeo
 
 Link: https://youtu.be/pVXC5UQZksA
+
 A apresentação principal do trabalho foi feita neste vídeo, seguindo as especificações propostas pelo docente Luiz Henrique Zanin.
 
 
 # Integrantes
 
 Andrey Ferreira Pichuti
+
 João Gabriel Silva Barbara da Conceição - GitHub: https://github.com/joao-gabriel-barbara
+
 Moshe Achkiy Mandujano Silverio - GitHub: https://github.com/Achkiy
